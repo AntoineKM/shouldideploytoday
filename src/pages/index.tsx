@@ -17,7 +17,6 @@ const MainPage: NextPage<MainPageProps> = ({
   const router = useRouter();
 
   React.useEffect(() => {
-    //  check if date day is equal to data.date day return
     if (!dayjs(data.date).isSame(date, "day")) {
       router.push({
         pathname: "/",
