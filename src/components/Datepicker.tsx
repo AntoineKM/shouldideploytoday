@@ -23,7 +23,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
         Array.from(Array(7).keys()).map((i) => {
           return (
             <option key={i} value={dayjs().subtract(i, "day").toISOString()}>
-              {dayjs().subtract(i, "day").format("dddd")} ({dayjs().subtract(i, "day").format("MMM D")})
+              {dayjs().subtract(i, "day").format("dddd")} ({dayjs().add(i, "day").format("MMM D")})
             </option>
           );
         })
