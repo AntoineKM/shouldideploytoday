@@ -4,7 +4,13 @@ import dayjs from "dayjs";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { ShouldIDeployResponse } from "./api";
+
+type ShouldIDeployResponse = {
+  timezone: string;
+  date: string;
+  shouldideploy: boolean;
+  message: string;
+}
 
 interface MainPageProps {
   data: ShouldIDeployResponse
@@ -21,7 +27,7 @@ const MainPage: NextPage<MainPageProps> = ({
       router.push({
         pathname: "/",
         query: {
-          date: date.toISOString()
+          date: date.format("YYYY-MM-DD")
         }
       })
     }
@@ -40,10 +46,8 @@ const MainPage: NextPage<MainPageProps> = ({
 };
 
 MainPage.getInitialProps = async (ctx: NextPageContext) => {
-  const { req, query } = ctx;
-  const protocol = req?.headers['x-forwarded-proto'] || 'http'
-  const baseUrl = req ? `${protocol}://${req.headers.host}` : ''
-  const res = await fetch(`${baseUrl}/api${query.date ? `?date=${query.date}` : ""}`);
+  const { query } = ctx;
+  const res = await fetch(` https://shouldideploy.today/api${query.date ? `?date=${query.date}` : ""}`);
   const data: ShouldIDeployResponse = await res.json();
 
   return {
