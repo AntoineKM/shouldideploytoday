@@ -47,7 +47,7 @@ const MainPage: NextPage<MainPageProps> = ({
 
 MainPage.getInitialProps = async (ctx: NextPageContext) => {
   const { query } = ctx;
-  const res = await fetch(` https://shouldideploy.today/api${query.date ? `?date=${query.date}` : ""}`);
+  const res = await fetch(`https://shouldideploy.today/api${query.date ? `?date=${query.date}` : ""}`);
   const data: ShouldIDeployResponse = await res.json();
 
   return {
