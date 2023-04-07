@@ -1,10 +1,16 @@
 import Datepicker from "@components/Datepicker";
-import { Container, InlineCode, Text } from "@tonightpass/kitchen";
+import { Container, InlineCode, Text, useKeyboard, KeyCode } from "@tonightpass/kitchen";
 import dayjs from "dayjs";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { ShouldIDeployResponse } from "./api";
+
+type ShouldIDeployResponse = {
+  timezone: string;
+  date: string;
+  shouldideploy: boolean;
+  message: string;
+}
 
 interface MainPageProps {
   data: ShouldIDeployResponse
@@ -21,17 +27,41 @@ const MainPage: NextPage<MainPageProps> = ({
       router.push({
         pathname: "/",
         query: {
-          date: date.toISOString()
+          date: date.format("YYYY-MM-DD")
         }
       })
     }
   }, [data.date, date, router]);
 
+  const refresh = () => {
+    router.push({
+      pathname: "/",
+      query: {
+        date: date.format("YYYY-MM-DD")
+      }
+    })
+  };
+
+  const { bindings } = useKeyboard(
+    (e) => {
+      if (e.keyCode === KeyCode.Space) {
+        console.log("space pressed");
+        refresh();
+      }
+    },
+    [KeyCode.Space],
+  );
 
   return (
-    <Container align={"center"} justify={"center"} h={"100%"} >
+    <Container align={"center"} justify={"center"} h={"100%"} px={"normal"} {...bindings}>
       <Text transform={"uppercase"} size={"large"} color={"lighter"}>Should I Deploy Today?</Text>
-      <Text transform={"uppercase"} weight={"extraBold"} size={"extraTitle"} mt={"large"}>{data.message}</Text>
+      <Text transform={"uppercase"} weight={"extraBold"} size={"extraTitle"} mt={"large"} align={"center"}>{data.message}</Text>
+      <Text mt={"medium"} monospace onClick={refresh} style={{
+        cursor: "pointer",
+        userSelect: "none"
+      }}>
+        Hit <InlineCode>Space</InlineCode> or Click
+      </Text>
       <Container mt={"large"} flex={0}>
         <Datepicker setDate={setDate} />
       </Container>
@@ -40,16 +70,13 @@ const MainPage: NextPage<MainPageProps> = ({
 };
 
 MainPage.getInitialProps = async (ctx: NextPageContext) => {
-  const { req, query } = ctx;
-  const protocol = req?.headers['x-forwarded-proto'] || 'http'
-  const baseUrl = req ? `${protocol}://${req.headers.host}` : ''
-  const res = await fetch(`${baseUrl}/api${query.date ? `?date=${query.date}` : ""}`);
+  const { query } = ctx;
+  const res = await fetch(`https://shouldideploy.today/api${query.date ? `?date=${query.date}` : ""}`);
   const data: ShouldIDeployResponse = await res.json();
 
   return {
     data
   };
 };
-
 
 export default MainPage;
