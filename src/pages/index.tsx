@@ -1,5 +1,5 @@
 import Datepicker from "@components/Datepicker";
-import { Container, InlineCode, Text } from "@tonightpass/kitchen";
+import { Container, InlineCode, Text, useKeyboard, KeyCode } from "@tonightpass/kitchen";
 import dayjs from "dayjs";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
@@ -33,11 +33,35 @@ const MainPage: NextPage<MainPageProps> = ({
     }
   }, [data.date, date, router]);
 
+  const refresh = () => {
+    router.push({
+      pathname: "/",
+      query: {
+        date: date.format("YYYY-MM-DD")
+      }
+    })
+  };
+
+  const { bindings } = useKeyboard(
+    (e) => {
+      if (e.keyCode === KeyCode.Space) {
+        console.log("space pressed");
+        refresh();
+      }
+    },
+    [KeyCode.Space],
+  );
 
   return (
-    <Container align={"center"} justify={"center"} h={"100%"} >
+    <Container align={"center"} justify={"center"} h={"100%"} px={"normal"} {...bindings}>
       <Text transform={"uppercase"} size={"large"} color={"lighter"}>Should I Deploy Today?</Text>
-      <Text transform={"uppercase"} weight={"extraBold"} size={"extraTitle"} mt={"large"}>{data.message}</Text>
+      <Text transform={"uppercase"} weight={"extraBold"} size={"extraTitle"} mt={"large"} align={"center"}>{data.message}</Text>
+      <Text mt={"medium"} monospace onClick={refresh} style={{
+        cursor: "pointer",
+        userSelect: "none"
+      }}>
+        Hit <InlineCode>Space</InlineCode> or Click
+      </Text>
       <Container mt={"large"} flex={0}>
         <Datepicker setDate={setDate} />
       </Container>
@@ -54,6 +78,5 @@ MainPage.getInitialProps = async (ctx: NextPageContext) => {
     data
   };
 };
-
 
 export default MainPage;
