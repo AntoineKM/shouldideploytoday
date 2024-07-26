@@ -1,6 +1,6 @@
 # shouldideploytoday
 
-This is a simple school project made with Next.js and Kitchen, which aims to help developers decide if they should deploy their code today or not. Thanks to the [Should I Deploy Today?](https://shouldideploy.today/) website for the inspiration and api.
+This is a simple school project made with Next.js and Kitchn, which aims to help developers decide if they should deploy their code today or not. Thanks to the [Should I Deploy Today?](https://shouldideploy.today/) website for the inspiration and api.
 
 ## Getting Started
 

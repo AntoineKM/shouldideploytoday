@@ -1,10 +1,10 @@
-import { KitchenProvider, themes } from '@tonightpass/kitchen'
+import { KitchnProvider } from 'kitchn'
 import type { AppProps } from 'next/app'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <KitchenProvider>
+    <KitchnProvider>
       <Component {...pageProps} />
-    </KitchenProvider>
+    </KitchnProvider>
   )
 }

@@ -1,5 +1,5 @@
 import Datepicker from "@components/Datepicker";
-import { Container, InlineCode, Text, useKeyboard, KeyCode } from "@tonightpass/kitchen";
+import { Container, InlineCode, Text, useKeyboard, KeyCode } from "kitchn";
 import dayjs from "dayjs";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
@@ -53,7 +53,7 @@ const MainPage: NextPage<MainPageProps> = ({
   );
 
   return (
-    <Container align={"center"} justify={"center"} h={"100%"} px={"normal"} {...bindings}>
+    <Container align={"center"} justify={"center"} h={"100vh"} px={"normal"} {...bindings}>
       <Text transform={"uppercase"} size={"large"} color={"lighter"}>Should I Deploy Today?</Text>
       <Text transform={"uppercase"} weight={"extraBold"} size={"extraTitle"} mt={"large"} align={"center"}>{data.message}</Text>
       <Text mt={"medium"} monospace onClick={refresh} style={{
